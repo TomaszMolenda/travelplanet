@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=tomo
 Group=www-data
-WorkingDirectory="{{ repository_path }}"
+WorkingDirectory={{ repository_path }}
 Environment="PATH={{ repository_path }}/travelplanetenv/bin"
 ExecStart="{{ repository_path }}/travelplanetenv/bin/gunicorn --workers 3 --bind unix:{{ application }}.sock -m 007 wsgi:app"
 
