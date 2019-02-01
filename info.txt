@@ -1,0 +1,2 @@
+
+        odpal export LC_ALL=C

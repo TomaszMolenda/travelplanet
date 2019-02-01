@@ -29,7 +29,7 @@
     - name: Install requirements in virtualenv
       pip:
         requirements: "{{ repository_path }}/requirements.txt"
-        virtualenv: "{{ repository_path }}/travelplanetenv"
+        virtualenv: "{{ repository_path }}/{{ application }}env"
     
     - name: Copy Upstart configuration
       template: 
@@ -41,3 +41,28 @@
         name: "{{ application }}"
         state: started
         
+    - name: Change permission
+      file: 
+        dest: "{{ repository_path }}"
+        owner: "tomo"
+        group: "tomo"
+        mode: 0775
+        recurse: yes
+        
+    - name: Copy Nginx site
+      template:
+        src: travelplanet-nginx.j2
+        dest: "/etc/nginx/sites-enabled/{{ application }}"
+      notify:
+        - restart nginx
+
+    - name: Make sure nginx is running
+      service:
+        name: nginx
+        state: started
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
