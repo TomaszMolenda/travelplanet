@@ -1,0 +1,43 @@
+---
+- name: Configure application
+  hosts: all
+  become: true
+  become_method: sudo
+  vars:
+    application: travelplanet1
+    repository_url: https://github.com/TomaszMolenda/travelplanet.git
+    repository_path: "/home/tomo/{{ application }}"
+
+  tasks:
+    - name: Install packages
+      apt: 
+        update_cache: yes
+        state: present
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - git
+          - python-pip
+          - nginx
+          - python-flask
+
+    - name: Clone repository
+      git:
+        repo: "{{ repository_url }}"
+        dest: "{{ repository_path }}"
+        
+    - name: Install requirements in virtualenv
+      pip:
+        requirements: "{{ repository_path }}/requirements.txt"
+        virtualenv: "{{ repository_path }}/travelplanetenv"
+    
+    - name: Copy Upstart configuration
+      template: 
+        src: travelplanet-service.j2
+        dest: "/etc/systemd/system/{{ application }}.service"
+
+    - name: Make sure our server is running
+      service: 
+        name: "{{ application }}"
+        state: started
+        
