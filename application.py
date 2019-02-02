@@ -1,4 +1,6 @@
 from flask import Flask, render_template
+
+import email_sender
 from scheduler import run_scheduler
 import database
 
@@ -11,6 +13,12 @@ def hello():
     counter = database.Database.getInstance().fetch_counter()
     founded = database.Database.getInstance().fetch_founded()
     return render_template('index.html', user=user, counter=counter, founded=founded)
+
+
+@app.route('/send')
+def hello1():
+    email_sender.send("test")
+    return "send"
 
 
 run_scheduler()
