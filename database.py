@@ -11,11 +11,24 @@ class Database:
             raise Exception("This class is a singleton!")
         else:
             Database.__instance = self
-        self.test = []
+        self.countries = []
+        self.counter = 0
+        self.founded = 0
 
-    def insert(self, _id):
-
-        self.test.append(_id)
+    def insert_country(self, country):
+        self.countries.append(country)
 
     def fetch(self):
-        return len(self.test)
+        return self.countries
+
+    def increase(self):
+        self.counter = self.counter + 1
+
+    def mark_found(self):
+        self.founded = self.founded + 1
+
+    def fetch_counter(self):
+        return self.counter
+
+    def fetch_founded(self):
+        return self.founded

@@ -8,8 +8,9 @@ app = Flask(__name__)
 @app.route('/')
 def hello():
     user = {'username': 'Miguel11'}
-    counter = database.Database.getInstance().fetch()
-    return render_template('index.html', user=user, counter=counter)
+    counter = database.Database.getInstance().fetch_counter()
+    founded = database.Database.getInstance().fetch_founded()
+    return render_template('index.html', user=user, counter=counter, founded=founded)
 
 
 run_scheduler()
