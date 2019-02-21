@@ -4,7 +4,7 @@
   become: true
   become_method: sudo
   vars:
-    application: travelplanet1
+    application: travelplanet2
     repository_url: https://github.com/TomaszMolenda/travelplanet.git
     repository_path: "/home/tomo/{{ application }}"
 
@@ -25,6 +25,7 @@
       git:
         repo: "{{ repository_url }}"
         dest: "{{ repository_path }}"
+        force: yes
         
     - name: Install requirements in virtualenv
       pip:
