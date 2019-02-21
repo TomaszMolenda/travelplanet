@@ -14,6 +14,7 @@ class Database:
         self.countries = []
         self.counter = 0
         self.founded = 0
+        self.price = 1500
 
     def insert_country(self, country):
         self.countries.append(country)
@@ -32,3 +33,6 @@ class Database:
 
     def fetch_founded(self):
         return self.founded
+
+    def fetch_price(self):
+        return self.price

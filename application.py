@@ -9,10 +9,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    user = {'username': 'Miguel11'}
     counter = database.Database.getInstance().fetch_counter()
     founded = database.Database.getInstance().fetch_founded()
-    return render_template('index.html', user=user, counter=counter, founded=founded)
+    price = database.Database.getInstance().fetch_price()
+    return render_template('index.html', price=price, counter=counter, founded=founded)
 
 
 @app.route('/send')

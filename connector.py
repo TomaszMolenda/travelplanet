@@ -82,16 +82,19 @@ def connect_for_offer(country_id, page_number):
     print("Strona: " + str(page_number) + ", stron w sumie: " + str(count_pages))
 
     offers = data['offers']
+
+    price = database.Database.getInstance().fetch_price()
+
     for offer in offers:
         if offer['category'] != 0:
             database.Database.getInstance().increase()
             print("https://www.travelplanet.pl" + offer['offerUrl'])
             print(str(offer['priceOnePerson']) + ', ' + offer['touroperatorName'])
-            if offer['priceOnePerson'] < 1500:
-                database.Database.getInstance().increase().mark_found()
+            if offer['priceOnePerson'] < price:
+                database.Database.getInstance().mark_found()
                 print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                email_content = prepare_email_content(offer)
-                email_sender.send(email_content)
+                # email_content = prepare_email_content(offer)
+                # email_sender.send(email_content)
 
     if count_pages > page_number:
         connect_for_offer(country_id, page_number + 1)
