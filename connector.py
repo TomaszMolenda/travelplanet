@@ -2,6 +2,7 @@ import requests
 import database
 import email_sender
 from country import Country
+from offer import Offer
 
 
 def connect_for_countries(country_id):
@@ -21,21 +22,20 @@ def connect_for_countries(country_id):
     pass
 
 
-def prepare_email_content(offer):
+def create_offer(offer):
+    id = offer['offerId']
     link = 'https://www.travelplanet.pl' + offer['offerUrl']
     country = offer['country']
     region = offer['region']
-    hotelName = offer['hotelName']
-    tripDepartureName = offer['tripDepartureName']
-    tripDurationText = offer['tripDurationText']
-    tripDatesText = offer['tripDatesText']
-    touroperatorName = offer['touroperatorName']
-    priceOnePerson = offer['priceOnePerson']
+    hotel_name = offer['hotelName']
+    trip_departure_name = offer['tripDepartureName']
+    trip_duration = offer['tripDurationText']
+    trip_dates = offer['tripDatesText']
+    tour_operator = offer['touroperatorName']
+    price_one_person = offer['priceOnePerson']
 
-    return '{}\n\nPaństwo: {}\n\nRejon: {}\n\nHotel: {}\n\n' \
-           'Lotnisko: {}\n\nIle dni: {}\n\n' \
-           'Data: {}\n\nOrganizator: {}\n\nCena: {}'.format(link, country, region, hotelName, tripDepartureName,
-                     tripDurationText, tripDatesText, touroperatorName, priceOnePerson)
+    return Offer(id, link, country, region, hotel_name, trip_departure_name, trip_duration, trip_dates, tour_operator,
+                 price_one_person)
 
 
 def connect_for_offer(country_id, page_number):
@@ -90,9 +90,10 @@ def connect_for_offer(country_id, page_number):
             database.Database.getInstance().increase()
             print("https://www.travelplanet.pl" + offer['offerUrl'])
             print(str(offer['priceOnePerson']) + ', ' + offer['touroperatorName'])
+            my_offer = create_offer(offer)
             if offer['priceOnePerson'] < price and database.Database.getInstance().offer_does_not_exists(offer['offerId']):
                 print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                email_content = prepare_email_content(offer)
+                email_content = my_offer.print()
                 email_sender.send(email_content)
                 database.Database.getInstance().insert_founded_offer(offer['offerId'])
 
