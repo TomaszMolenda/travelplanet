@@ -19,3 +19,16 @@ class Offer(object):
                                                                 self.trip_departure_name,
                                                                 self.trip_duration, self.trip_dates, self.tour_operator,
                                                                 self.price_one_person)
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.country == other.country \
+                   and self.region == other.region \
+                   and self.hotel_name == other.hotel_name \
+                   and self.trip_departure_name == other.trip_departure_name \
+                   and self.trip_duration == other.trip_duration \
+                   and self.trip_dates == other.trip_dates \
+                   and self.tour_operator == other.tour_operator \
+                   and self.price_one_person == other.price_one_person
+        else:
+            return False
