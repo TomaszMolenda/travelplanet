@@ -38,9 +38,9 @@ def create_offer(offer):
                  price_one_person)
 
 
-def connect_for_offer(country_id, page_number):
+def connect_for_offer(country, page_number):
     url = "https://www.travelplanet.pl/json/wczasy/oferty"
-    params = {'kierunek': country_id,
+    params = {'kierunek': country.id,
               'wylot': '01.04.2019',
               'przylot': '14.11.2019',
               'osoby': 2,
@@ -91,14 +91,15 @@ def connect_for_offer(country_id, page_number):
             print("https://www.travelplanet.pl" + offer['offerUrl'])
             print(str(offer['priceOnePerson']) + ', ' + offer['touroperatorName'])
             my_offer = create_offer(offer)
+            country.add_offer(my_offer)
             if my_offer.price_one_person < price and database.Database.getInstance().offer_does_not_exists(my_offer):
                 print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                email_content = my_offer.print()
-                email_sender.send(email_content)
+                # email_content = my_offer.print()
+                # email_sender.send(email_content)
                 database.Database.getInstance().insert_founded_offer(my_offer)
 
     if count_pages > page_number:
-        connect_for_offer(country_id, page_number + 1)
+        connect_for_offer(country, page_number + 1)
     pass
 
 
@@ -108,5 +109,4 @@ def search_travel():
     #     # if i not in [38, 39]:
          connect_for_countries(i)
          for country in database.Database.getInstance().fetch():
-             connect_for_offer(country.id, 1)
-
+             connect_for_offer(country, 1)

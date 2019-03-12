@@ -15,6 +15,12 @@ def hello():
     return render_template('index.html', price=price, counter=counter, founded=founded)
 
 
+@app.route('/all')
+def all():
+    countries = database.Database.getInstance().fetch()
+    return render_template('all.html', countries=countries)
+
+
 @app.route('/send')
 def hello1():
     email_sender.send("test")
