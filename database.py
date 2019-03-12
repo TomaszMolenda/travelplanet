@@ -13,7 +13,6 @@ class Database:
             Database.__instance = self
         self.countries = []
         self.counter = 0
-        self.founded = 0
         self.price = 1500
         self.founded_offers = []
 
@@ -26,14 +25,11 @@ class Database:
     def increase(self):
         self.counter = self.counter + 1
 
-    def mark_found(self):
-        self.founded = self.founded + 1
-
     def fetch_counter(self):
         return self.counter
 
     def fetch_founded(self):
-        return self.founded
+        return len(self.founded_offers)
 
     def fetch_price(self):
         return self.price

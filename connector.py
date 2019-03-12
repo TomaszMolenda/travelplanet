@@ -90,8 +90,7 @@ def connect_for_offer(country_id, page_number):
             database.Database.getInstance().increase()
             print("https://www.travelplanet.pl" + offer['offerUrl'])
             print(str(offer['priceOnePerson']) + ', ' + offer['touroperatorName'])
-            if offer['priceOnePerson'] < price & database.Database.getInstance().offer_does_not_exists(offer['offerId']):
-                database.Database.getInstance().mark_found()
+            if offer['priceOnePerson'] < price and database.Database.getInstance().offer_does_not_exists(offer['offerId']):
                 print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 email_content = prepare_email_content(offer)
                 email_sender.send(email_content)
