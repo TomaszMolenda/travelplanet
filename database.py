@@ -15,6 +15,7 @@ class Database:
         self.counter = 0
         self.founded = 0
         self.price = 1500
+        self.founded_offers = []
 
     def insert_country(self, country):
         self.countries.append(country)
@@ -36,3 +37,11 @@ class Database:
 
     def fetch_price(self):
         return self.price
+
+    def insert_founded_offer(self, offer_id):
+        self.founded_offers.append(offer_id)
+
+    def offer_does_not_exists(self, offer_id):
+        return offer_id not in self.founded_offers
+
+

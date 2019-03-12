@@ -42,7 +42,7 @@ def connect_for_offer(country_id, page_number):
     url = "https://www.travelplanet.pl/json/wczasy/oferty"
     params = {'kierunek': country_id,
               'wylot': '01.04.2019',
-              'przylot': '14.04.2019',
+              'przylot': '14.11.2019',
               'osoby': 2,
               'czas': '6:8',
               'dojazd': 'F',
@@ -53,7 +53,7 @@ def connect_for_offer(country_id, page_number):
               'produkt': 1,
               'category': 'wczasy',
               'wyzywienie': 1,
-              'ocena': 4
+              'ocena': 5
               }
 
     headers = {
@@ -90,11 +90,12 @@ def connect_for_offer(country_id, page_number):
             database.Database.getInstance().increase()
             print("https://www.travelplanet.pl" + offer['offerUrl'])
             print(str(offer['priceOnePerson']) + ', ' + offer['touroperatorName'])
-            if offer['priceOnePerson'] < price:
+            if offer['priceOnePerson'] < price & database.Database.getInstance().offer_does_not_exists(offer['offerId']):
                 database.Database.getInstance().mark_found()
                 print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                # email_content = prepare_email_content(offer)
-                # email_sender.send(email_content)
+                email_content = prepare_email_content(offer)
+                email_sender.send(email_content)
+                database.Database.getInstance().insert_founded_offer(offer['offerId'])
 
     if count_pages > page_number:
         connect_for_offer(country_id, page_number + 1)
@@ -102,9 +103,10 @@ def connect_for_offer(country_id, page_number):
 
 
 def search_travel():
-    connect_for_offer("15_176,15_93,15_2625,15_2635,15_55,15_50", 1)
-    # for i in range(54):
+    #connect_for_offer("15_176,15_93,15_2625,15_2635,15_55,15_50", 1)
+     for i in range(54):
     #     # if i not in [38, 39]:
-    #     connect_for_countries(i)
-    #     for country in database.Database.getInstance().fetch():
-    #         connect_for_offer(country.id, 1)
+         connect_for_countries(i)
+         for country in database.Database.getInstance().fetch():
+             connect_for_offer(country.id, 1)
+
